@@ -1,0 +1,2 @@
+swarm_controller:your_package_name
+-DCATKIN_DEVEL_PREFIX=/root/workspace/devel -DCMAKE_INSTALL_PREFIX=/root/workspace/install -G Unix Makefiles
