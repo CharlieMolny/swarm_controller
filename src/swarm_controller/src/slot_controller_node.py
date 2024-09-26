@@ -5,44 +5,52 @@ from threading import Thread
 from multiprocessing import Manager, Process, Lock
 from slot_environment import slotEnvironment, TrajectoryPlanner
 import os, time
-from msg import velocity_msg
+from swarm_controller.msg import velocity_msg
 
 class CommunicaitonControl:
-    def __init__(self, duckie_ip, number, shared_slots, lock, frequency, num_lanes, initial_speed=0.2):
+    def __init__(self, duckie_ip, number, shared_slots, lock, frequency, num_lanes, initial_speed=0.0):
         self.duckie_ip = duckie_ip
         self.number = number
+        self.vehicle_name = "duckie"+str(self.number) 
+
         self.shared_slots = shared_slots  # Shared slot dict from the main process
         self.lock = lock  # Lock to prevent race conditions
         self.frequency = frequency
         self.speed = initial_speed
         self.num_lanes = num_lanes
+        self.threshold = 0.03
 
         # Set up ROS communication
         self.topic = 'chatter'
         self.setup_ros()
 
     def setup_ros(self):
-        os.environ["ROS_MASTER_URI"] = self.duckie_ip
-        self.ros = os.environ.get('ROS_MASTER_URI', 'Not set')
+       
+        
+        self.ros_uri = os.environ.get('ROS_MASTER_URI', 'Not set')
 
         self.wheels_pub = rospy.Publisher(self.topic, String, queue_size=10)
-        self.location_sub = rospy.Subscriber('location_service', Pose2D, self.location_callback)
+        
+        self.location_topic = "/duckie1/location"
+        rospy.loginfo("subscribing to topic is: {} and the ros URI master is {}".format(self.location_topic, os.environ.get('ROS_MASTER_URI', 'Not set')))
+        self.location_sub = rospy.Subscriber(self.location_topic, String, self.location_callback)
 
         self.sleep_rate = rospy.Rate(0.333)  # Sleep for 3 seconds to synchronize
         self.sleep_rate.sleep()
 
-    def run(self):
-        rate = rospy.Rate(self.frequency)
-        while not rospy.is_shutdown():
-            # Send current speed to the Duckiebot
-            log = f"Duckiebot {self.number} sending speed: {self.speed}"
-            rospy.loginfo(log)
-            self.wheels_pub.publish(String(str(self.speed)))  # Publish as string
-            rate.sleep()
+    # def run(self):
+    #     rate = rospy.Rate(self.frequency)
+    #     while not rospy.is_shutdown():
+    #         # Send current speed to the Duckiebot
+    #         log = "Duckiebot {} sending speed: {}".format(self.number,self.speed)
+    #         rospy.loginfo(log)
+    #         self.wheels_pub.publish(String(str(self.speed))) 
+    #         rate.sleep()
 
     def location_callback(self, msg):
+        rospy.loginfo("recieved location data ")
         with self.lock:
-            rospy.loginfo(f"Duckiebot {self.number} received position: x={msg.x}, y={msg.y}")
+            
             velocity = None
             slot_id = None
 
@@ -52,7 +60,12 @@ class CommunicaitonControl:
 
                 if not slot['reserved']:
                     slot['reserved'] = True
-                    rospy.loginfo(f"Slot {nearest_slot_id} reserved for Duckiebot {self.number}")
+                    rospy.loginfo("Slot {} reserved for Duckiebot {}".format(nearest_slot_id,self.number))
+
+                if abs(slot['x'] - msg.x) <  self.threshold:
+                    slot['filled'] = True
+                else:
+                    slot['filled'] = False
 
                 # Update shared_slots
                 self.shared_slots[nearest_slot_id] = slot
@@ -112,15 +125,17 @@ class slotControllerNode:
         self.manager = Manager()
         self.shared_slots = self.manager.dict(self.slot_env.slots)  # Shared dict for slots
         self.lock = Lock()
+        self.duckie_ip_addrs = duckie_ip_addrs
 
+    def run(self):
         # Start thread to continuously update slots
         self.slot_update_thread = Thread(target=self.update_slots_continuously)
         self.slot_update_thread.start()
 
         # Create processes for each Duckiebot
         self.processes = []
-        for i, ip in enumerate(duckie_ip_addrs):
-            print(f"Starting process for Duckiebot at IP: {ip}")
+        for i, ip in enumerate(self.duckie_ip_addrs, start=1):
+            print("Starting process for Duckiebot at IP: {}".format(ip))
             proc = Process(target=self.run_duckiebot, args=(ip, i,))
             self.processes.append(proc)
             proc.start()
@@ -135,8 +150,8 @@ class slotControllerNode:
             time.sleep(1 / self.slot_env.frequency)
 
     def run_duckiebot(self, duckie_ip, number):
-        # Initialize ROS in the separate Duckiebot process
-        rospy.init_node(f'duckiebot_{number}', anonymous=True)
+        os.environ["ROS_MASTER_URI"] = duckie_ip
+        rospy.init_node('duckiebot_{}'.format(number), anonymous=True)
         com_controller = CommunicaitonControl(duckie_ip, number, self.shared_slots, self.lock, self.slot_env.frequency, len(self.slot_env.slots))
-        com_controller.run()
+        # com_controller.run()
 
