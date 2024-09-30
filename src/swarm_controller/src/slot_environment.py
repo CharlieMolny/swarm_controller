@@ -132,44 +132,7 @@ class slotEnvironment:
         else:
             raise Exception("No available slot found")
 
-    def find_max_velocity(self, v0, a1, a2, diff):
-        '''------  derivation  ------
-        s_slot=v0t + d
-        s_vehicle= s1+s2pass
-        v1^2 - 2v0v1 + v0^2 + (2a1a2d)/(a2 - a1) = 0
 
-        a=1, b = -2v0, c = v0^2 + (2a1a2d)/(a2 - a1)
-
-        v1 =(-b+sqrt(b^-4ac))/2a
-
-        '''
-        v1 = self.find_v_travel(v0, a1, a2, diff)
-
-        t1 = (v1 - v0) / a1
-        t2 = (v0 - v1) / a2
-
-        return v1, t1 + t2
-
-    def find_v_travel(self, v0, a1, a2, diff):
-        if a2 == a1:
-            raise ValueError("a1 and a2 must not be equal to avoid division by zero.")
-
-        a = 1
-        b = -2 * v0
-        c1 = v0 ** 2
-        c2 = -(2 * a1 * a2 * diff) / (a2 - a1)
-        c = c1 + c2
-
-        d = (b ** 2) - (4 * a * c)
-        if d < 0:
-            raise ValueError("No real solution exists for v1.")
-
-        if diff > 0:
-            v1 = (-b + math.sqrt(d)) / (2 * a)
-        else:
-            v1 = (-b - math.sqrt(d)) / (2 * a)
-
-        return v1
 
 
 
