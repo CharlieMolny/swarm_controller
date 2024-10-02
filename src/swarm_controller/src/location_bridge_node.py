@@ -19,7 +19,7 @@ class LocationBridgeNode:
         # External and local topics
         self.external_location_topic = '/{}/location'.format(self.vehicle_name)
         self.local_location_topic = '/loc'
-        self.local_velocity_topic = '/vel'
+
 
         # Start separate processes for listening and sending
         listen_process = Process(target=self.listen_to_external_location)

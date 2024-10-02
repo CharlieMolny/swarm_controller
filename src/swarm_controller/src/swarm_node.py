@@ -19,7 +19,7 @@ def load_config(config_path):
 def main():
 
 
-    road_config=load_config('src/swarm_controller/src/config/road_config.json')
+    road_config=load_config('/root/workspace/src/swarm_controller/src/config/road_config.json')
 
 
     slot_env = slotControllerNode(slot_length=road_config['slot_length'],slot_gap=road_config['slot_gap'], num_lanes=road_config['num_lanes'],lane_velocities=road_config['lane_velocities'],

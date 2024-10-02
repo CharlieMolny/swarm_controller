@@ -1,0 +1,22 @@
+<launch>
+    <!-- Launch slot_controller_node -->
+    <node pkg="swarm_controller" 
+          type="slot_controller_node.py" 
+          name="slot_controller_node" 
+          output="screen">
+    </node>
+
+    <!-- Launch location_bridge_node with anonymous=True to avoid conflicts -->
+    <node pkg="swarm_controller" 
+          type="location_bridge_node.py" 
+          name="location_bridge_node" 
+          output="screen" >
+    </node>
+
+    <!-- Launch velocity_bridge_node with anonymous=True to avoid conflicts -->
+    <node pkg="swarm_controller" 
+          type="velocity_bridge_node.py" 
+          name="velocity_bridge_node" 
+          output="screen" >
+    </node>
+</launch>
