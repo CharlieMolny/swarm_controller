@@ -47,17 +47,17 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
 )
 
-## Generate messages in the 'msg' folder
-add_message_files(
-  FILES
-  velocity_msg.msg
-  location_msg.msg
+# ## Generate messages in the 'msg' folder
+# add_message_files(
+#   FILES
+#   velocity_msg.msg
+#   location_msg.msg
   
-)
-generate_messages(
-  DEPENDENCIES
-  std_msgs
-)
+# )
+# generate_messages(
+#   DEPENDENCIES
+#   std_msgs
+# )
 
 ## Generate services in the 'srv' folder
 # add_service_files(

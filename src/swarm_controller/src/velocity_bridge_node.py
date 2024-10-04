@@ -19,6 +19,8 @@ class velocityBridgeNode:
      
         self.local_velocity_topic = '/vel'
 
+        self.shutdown_velocity = str(0)
+
 
         listen_process = Process(target=self.listen_to_velocity_local)
         send_process = Process(target=self.send_velocity_external)
@@ -41,31 +43,36 @@ class velocityBridgeNode:
         os.environ["ROS_MASTER_URI"] = self.duckie_ros_uri
         rospy.init_node('sender_node', anonymous=True)
 
-        local_location_pub = rospy.Publisher(self.external_velocity_topic, String, queue_size=1)
+        external_velocity_pub = rospy.Publisher(self.external_velocity_topic, String, queue_size=1)
 
         
         rospy.loginfo("Starting to publish velocity location data")
 
         while not rospy.is_shutdown():
             if self.velocity_received_event.wait(): 
-                local_location_pub.publish(self.velocity.value)  
+                external_velocity_pub.publish(self.velocity.value)  
                 rospy.loginfo("Published  velocity: {}".format(self.velocity.value))
                 self.velocity_received_event.clear() 
-    # def send_velocity_external(self):
-    #     os.environ["ROS_MASTER_URI"] = self.duckie_ros_uri
-    #     rospy.init_node('sender_node', anonymous=True)
 
-    #     # Publisher for velocity
-    #     local_velocity_pub = rospy.Publisher(self.external_velocity_topic, String, queue_size=1)
+    def on_shutdown(self):
+        os.environ["ROS_MASTER_URI"] = self.duckie_ros_uri
+        rospy.init_node('sender_node', anonymous=True)
 
-    #     rospy.loginfo("sending on topic: {}".format(self.external_velocity_topic))
-    #     rate = rospy.Rate(0.333)  # Frequency of publishing (1/3 Hz -> every 3 seconds)
+        external_velocity_pub = rospy.Publisher(self.external_velocity_topic, String, queue_size=1)
 
-    #     while not rospy.is_shutdown():
-    #         test_velocity_data = "0.1"
-    #         local_velocity_pub.publish(test_velocity_data)  # Publish test data
-    #         rospy.loginfo("Published test velocity data: {}".format(test_velocity_data))
-    #         rate.sleep()  # Sleep for 3 seconds
+        
+        rospy.loginfo("Starting to publish velocity location data")
+
+        while not rospy.is_shutdown():
+            if self.velocity_received_event.wait(): 
+                external_velocity_pub.publish(self.shutdown_velocity)  
+                rospy.loginfo("Sending shutdown velocity value {}".format(self.shutdown_velocity))
+                self.velocity_received_event.clear() 
+
+        
+
+
+                
 
 
     def velocity_callback(self, msg):

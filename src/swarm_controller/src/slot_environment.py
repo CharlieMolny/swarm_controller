@@ -105,24 +105,32 @@ class slotEnvironment:
 
             self.slots[new_slot_id] = new_slot
 
-
-
-
     def find_veloctity(self,data):
-        vehicle_name,lane,location = self.parse_data(data)
+        vehicle_name,lane,vehcile_location = self.parse_data(data)
         if vehicle_name not in self.trajectories:
-            self.assign_near_slot_same_lane(location,vehicle_name,lane)
+            self.assign_near_slot(vehcile_location,vehicle_name,lane)
+
+        slot_id = self.trajectories[vehicle_name]['target_slot_id']
+        slot_x_location = self.slots[slot_id]['location']['x']
+        diff= abs(slot_x_location-vehcile_location['x'])
+        if (diff>abs(self.trajectories[vehicle_name]['current_difference'])) and not self.trajectories[vehicle_name]['in_slot']:     
+            self.assign_near_slot(vehcile_location,vehicle_name,lane)
+
+        elif (diff<=self.threshold):
+            self.trajectories[vehicle_name]['in_slot'] = True
+
+            
+        self.trajectories[vehicle_name]['current_difference'] = diff
         return self.compute_velocity(vehicle_name)
         
+            
 
-
-    def assign_near_slot_same_lane(self, location,vehcile_name,lane):
-        rospy.loginfo("in find near slot same lane {}".format(location))
+    def assign_near_slot(self, location,vehcile_name,lane):
         min_distance = float('inf')
         nearest_slot_id = None
         diff = None
 
-        rospy.loginfo("begining for loop")
+
         for slot_id, slot in self.slots.items():
             if slot['lane'] != lane:
                 continue  
@@ -155,18 +163,18 @@ class slotEnvironment:
 
 
     
-    def find_trajectory(self,  slot_id, diff,vehicle_name,lane):
+    def find_trajectory(self,  slot_id, diff,vehicle_name,lane,current_velocity =0):
         final_velocity = self.lane_velocities[lane]
 
         if  0<abs(diff)<0.1:
-            a1, a2 = 0,0
-  
+            a1, a2 = 0,0 
             
             self.trajectories[vehicle_name] = {
                 'target_slot_id': slot_id,
-                'max_velocity': final_velocity,
-                'min_velocity': final_velocity,
-                'previous_velocity':final_velocity,
+                'v0': final_velocity,
+                'v1': final_velocity,
+                'v2':final_velocity,
+                'v_(i-1)': final_velocity,
                 'current_difference': diff,
                 'accelerate': False,
                 'in_slot': True
@@ -176,13 +184,14 @@ class slotEnvironment:
 
         elif diff > 0:
             a1, a2 = self.max_acceleration, self.max_deceleration
-            max_velocity, _ = self.find_max_velocity(0,final_velocity ,a1, a2, diff)
+            max_velocity, _ = self.find_max_velocity(current_velocity,final_velocity ,a1, a2, diff)
             
             self.trajectories[vehicle_name] = {
                 'target_slot_id': slot_id,
-                'max_velocity': max_velocity,
-                'min_velocity': final_velocity,
-                'previous_velocity':0,
+                'v0': current_velocity,
+                'v1': max_velocity,
+                'v2': final_velocity,
+                'v_(i-1)': current_velocity,
                 'current_difference': diff,
                 'accelerate': True,
                 'in_slot': False
@@ -190,12 +199,13 @@ class slotEnvironment:
             print("trajectory is {}".format(self.trajectories[vehicle_name]))
         else:
             a1, a2 = self.max_deceleration, self.max_acceleration
-            min_velocity, _ = self.find_max_velocity(final_velocity, 0,a1, a2, diff)
+            min_velocity, _ = self.find_max_velocity(current_velocity, final_velocity,a1, a2, diff)
             self.trajectories[vehicle_name] = {
                 'target_slot_id': slot_id,
-                'max_velocity': final_velocity,
-                'min_velocity': min_velocity,
-                'previous_velocity':0,
+                'v0': current_velocity,
+                'v1': min_velocity,
+                'v2': final_velocity,
+                'v_(i-1)': current_velocity,
                 'current_difference':diff,
                 'accelerate': False,
                 'in_slot': False
@@ -217,6 +227,15 @@ class slotEnvironment:
 
         t1 = (v1 - v0) / a1
         t2 = (v2 - v1) / a2
+
+        s1 = (v1**2-v0**2)/(2*a1)
+        s2 = (v2**2-v1**2)/(2*a2)
+
+        LHS  = s1+ s2
+
+        RHS = diff + v2*(t1+t2)
+
+        rospy.loginfo("left hand side is: {}, right hand side is: {}".format(LHS,RHS))
 
         return v1, t1 + t2
 
@@ -246,24 +265,25 @@ class slotEnvironment:
 
     def compute_velocity(self,vehicle_name):
         if self.trajectories[vehicle_name]['in_slot']:
-            self.trajectories[vehicle_name]['previous_velocity']=self.trajectories[vehicle_name]['max_velocity']
-        if self.trajectories[vehicle_name]['accelerate']:
-            if self.trajectories[vehicle_name]['previous_velocity']<self.trajectories[vehicle_name]['max_velocity']:
-                self.trajectories[vehicle_name]['previous_velocity']+= self.max_acceleration*self.dt
-            else:
-                self.trajectories[vehicle_name]['previous_velocity']+= self.max_deceleration*self.dt
-        else:
-            if self.trajectories[vehicle_name]['previous_velocity']>self.trajectories[vehicle_name]['min_velocity']:
-                self.trajectories[vehicle_name]['previous_velocity'] +=self.max_deceleration*self.dt
-            else:
-                self.trajectories[vehicle_name]['previous_velocity'] +=self.max_acceleration*self.dt
+            self.trajectories[vehicle_name]['v_(i-1)']=self.trajectories[vehicle_name]['v0']
 
-        return self.trajectories[vehicle_name]['previous_velocity']
+        elif self.trajectories[vehicle_name]['accelerate']:
+            if self.trajectories[vehicle_name]['v_(i-1)']<self.trajectories[vehicle_name]['v1']:
+                self.trajectories[vehicle_name]['v_(i-1)']+= self.max_acceleration*self.dt
+            else:
+                self.trajectories[vehicle_name]['v_(i-1)']+= self.max_deceleration*self.dt
+        else:
+            if self.trajectories[vehicle_name]['v_(i-1)']>self.trajectories[vehicle_name]['v1']:
+                self.trajectories[vehicle_name]['v_(i-1)'] +=self.max_deceleration*self.dt
+            else:
+                self.trajectories[vehicle_name]['v_(i-1)'] +=self.max_acceleration*self.dt
+
+        return self.trajectories[vehicle_name]['v_(i-1)']
     
 
     def parse_data(self, input_string):
         input_string = str(input_string)
-        rospy.loginfo("input string is {}".format(input_string))
+
         pattern = r'vehicle_name:\s*(\w+)\s*lane:\s*(\d+)\s*x:\s*(-?\d+\.?\d*)\s*y:\s*(-?\d+\.?\d*)'
 
         match = re.search(pattern, input_string)

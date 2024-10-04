@@ -1,22 +1,37 @@
 <launch>
+
+        <rosparam file="$(find swarm_controller)/config/params.yaml" />
+          <!-- Launch velocity_bridge_node with a unique name -->
+    <node pkg="swarm_controller" 
+          type="local_velocity_sender.py" 
+          name="velocity_bridge_node_1" 
+          output="screen"
+          launch-prefix="bash -c 'sleep 2; $0 $@'">
+
+    </node>
+
     <!-- Launch slot_controller_node -->
     <node pkg="swarm_controller" 
           type="slot_controller_node.py" 
-          name="slot_controller_node" 
-          output="screen">
+          name="slot_controller_node_1" 
+          output="screen"
+          launch-prefix="bash -c 'sleep 2; $0 $@'">
+
     </node>
 
-    <!-- Launch location_bridge_node with anonymous=True to avoid conflicts -->
-    <node pkg="swarm_controller" 
-          type="location_bridge_node.py" 
-          name="location_bridge_node" 
-          output="screen" >
-    </node>
+    <!-- Launch location_bridge_node with a unique name -->
+      <node pkg="swarm_controller" 
+            type="external_location_listener_node.py" 
+            name="location_bridge_node" 
+            output="screen" 
+            launch-prefix="bash -c 'sleep 2; $0 $@'">
 
-    <!-- Launch velocity_bridge_node with anonymous=True to avoid conflicts -->
-    <node pkg="swarm_controller" 
-          type="velocity_bridge_node.py" 
-          name="velocity_bridge_node" 
-          output="screen" >
-    </node>
+
+
+      </node>
+
+
+
 </launch>
+
+

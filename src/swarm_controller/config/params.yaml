@@ -1,0 +1,14 @@
+vehicle_name: "duckie1"
+ros_master_uri: "http://192.168.158.187:11311"
+slot_controller_server_socket_number: 5000
+velocity_sender_server_socket_number: 5010
+
+
+lane_width: 0.2
+num_lanes: 2
+road_length: 3.5
+lane_velocities: [0.025,0.05]
+num_slots_per_lane: 3
+slot_length: 0.1
+slot_gap: 0.1
+frequency: 1
