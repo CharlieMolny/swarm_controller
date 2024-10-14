@@ -56,25 +56,18 @@ CMAKE_BINARY_DIR = /root/workspace/build
 # Include the progress variables for this target.
 include swarm_controller/CMakeFiles/swarm_controller_generate_messages_cpp.dir/progress.make
 
-swarm_controller/CMakeFiles/swarm_controller_generate_messages_cpp: /root/workspace/devel/include/swarm_controller/velocity_msg.h
-swarm_controller/CMakeFiles/swarm_controller_generate_messages_cpp: /root/workspace/devel/include/swarm_controller/location_msg.h
+swarm_controller/CMakeFiles/swarm_controller_generate_messages_cpp: /root/workspace/devel/include/swarm_controller/WheelsCmdStamped.h
 
 
-/root/workspace/devel/include/swarm_controller/velocity_msg.h: /opt/ros/melodic/lib/gencpp/gen_cpp.py
-/root/workspace/devel/include/swarm_controller/velocity_msg.h: /root/workspace/src/swarm_controller/msg/velocity_msg.msg
-/root/workspace/devel/include/swarm_controller/velocity_msg.h: /opt/ros/melodic/share/gencpp/msg.h.template
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/root/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating C++ code from swarm_controller/velocity_msg.msg"
-	cd /root/workspace/src/swarm_controller && /root/workspace/build/catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /root/workspace/src/swarm_controller/msg/velocity_msg.msg -Iswarm_controller:/root/workspace/src/swarm_controller/msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -p swarm_controller -o /root/workspace/devel/include/swarm_controller -e /opt/ros/melodic/share/gencpp/cmake/..
-
-/root/workspace/devel/include/swarm_controller/location_msg.h: /opt/ros/melodic/lib/gencpp/gen_cpp.py
-/root/workspace/devel/include/swarm_controller/location_msg.h: /root/workspace/src/swarm_controller/msg/location_msg.msg
-/root/workspace/devel/include/swarm_controller/location_msg.h: /opt/ros/melodic/share/gencpp/msg.h.template
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/root/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating C++ code from swarm_controller/location_msg.msg"
-	cd /root/workspace/src/swarm_controller && /root/workspace/build/catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /root/workspace/src/swarm_controller/msg/location_msg.msg -Iswarm_controller:/root/workspace/src/swarm_controller/msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -p swarm_controller -o /root/workspace/devel/include/swarm_controller -e /opt/ros/melodic/share/gencpp/cmake/..
+/root/workspace/devel/include/swarm_controller/WheelsCmdStamped.h: /opt/ros/melodic/lib/gencpp/gen_cpp.py
+/root/workspace/devel/include/swarm_controller/WheelsCmdStamped.h: /root/workspace/src/swarm_controller/msg/WheelsCmdStamped.msg
+/root/workspace/devel/include/swarm_controller/WheelsCmdStamped.h: /opt/ros/melodic/share/std_msgs/msg/Header.msg
+/root/workspace/devel/include/swarm_controller/WheelsCmdStamped.h: /opt/ros/melodic/share/gencpp/msg.h.template
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/root/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating C++ code from swarm_controller/WheelsCmdStamped.msg"
+	cd /root/workspace/src/swarm_controller && /root/workspace/build/catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /root/workspace/src/swarm_controller/msg/WheelsCmdStamped.msg -Iswarm_controller:/root/workspace/src/swarm_controller/msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -p swarm_controller -o /root/workspace/devel/include/swarm_controller -e /opt/ros/melodic/share/gencpp/cmake/..
 
 swarm_controller_generate_messages_cpp: swarm_controller/CMakeFiles/swarm_controller_generate_messages_cpp
-swarm_controller_generate_messages_cpp: /root/workspace/devel/include/swarm_controller/velocity_msg.h
-swarm_controller_generate_messages_cpp: /root/workspace/devel/include/swarm_controller/location_msg.h
+swarm_controller_generate_messages_cpp: /root/workspace/devel/include/swarm_controller/WheelsCmdStamped.h
 swarm_controller_generate_messages_cpp: swarm_controller/CMakeFiles/swarm_controller_generate_messages_cpp.dir/build.make
 
 .PHONY : swarm_controller_generate_messages_cpp

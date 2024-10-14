@@ -56,30 +56,23 @@ CMAKE_BINARY_DIR = /root/workspace/build
 # Include the progress variables for this target.
 include swarm_controller/CMakeFiles/swarm_controller_generate_messages_py.dir/progress.make
 
-swarm_controller/CMakeFiles/swarm_controller_generate_messages_py: /root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_velocity_msg.py
-swarm_controller/CMakeFiles/swarm_controller_generate_messages_py: /root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_location_msg.py
+swarm_controller/CMakeFiles/swarm_controller_generate_messages_py: /root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_WheelsCmdStamped.py
 swarm_controller/CMakeFiles/swarm_controller_generate_messages_py: /root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/__init__.py
 
 
-/root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_velocity_msg.py: /opt/ros/melodic/lib/genpy/genmsg_py.py
-/root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_velocity_msg.py: /root/workspace/src/swarm_controller/msg/velocity_msg.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/root/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating Python from MSG swarm_controller/velocity_msg"
-	cd /root/workspace/build/swarm_controller && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /root/workspace/src/swarm_controller/msg/velocity_msg.msg -Iswarm_controller:/root/workspace/src/swarm_controller/msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -p swarm_controller -o /root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg
-
-/root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_location_msg.py: /opt/ros/melodic/lib/genpy/genmsg_py.py
-/root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_location_msg.py: /root/workspace/src/swarm_controller/msg/location_msg.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/root/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Python from MSG swarm_controller/location_msg"
-	cd /root/workspace/build/swarm_controller && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /root/workspace/src/swarm_controller/msg/location_msg.msg -Iswarm_controller:/root/workspace/src/swarm_controller/msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -p swarm_controller -o /root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg
+/root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_WheelsCmdStamped.py: /opt/ros/melodic/lib/genpy/genmsg_py.py
+/root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_WheelsCmdStamped.py: /root/workspace/src/swarm_controller/msg/WheelsCmdStamped.msg
+/root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_WheelsCmdStamped.py: /opt/ros/melodic/share/std_msgs/msg/Header.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/root/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating Python from MSG swarm_controller/WheelsCmdStamped"
+	cd /root/workspace/build/swarm_controller && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /root/workspace/src/swarm_controller/msg/WheelsCmdStamped.msg -Iswarm_controller:/root/workspace/src/swarm_controller/msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -p swarm_controller -o /root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg
 
 /root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/__init__.py: /opt/ros/melodic/lib/genpy/genmsg_py.py
-/root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/__init__.py: /root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_velocity_msg.py
-/root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/__init__.py: /root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_location_msg.py
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/root/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating Python msg __init__.py for swarm_controller"
+/root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/__init__.py: /root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_WheelsCmdStamped.py
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/root/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Python msg __init__.py for swarm_controller"
 	cd /root/workspace/build/swarm_controller && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py -o /root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg --initpy
 
 swarm_controller_generate_messages_py: swarm_controller/CMakeFiles/swarm_controller_generate_messages_py
-swarm_controller_generate_messages_py: /root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_velocity_msg.py
-swarm_controller_generate_messages_py: /root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_location_msg.py
+swarm_controller_generate_messages_py: /root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_WheelsCmdStamped.py
 swarm_controller_generate_messages_py: /root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/__init__.py
 swarm_controller_generate_messages_py: swarm_controller/CMakeFiles/swarm_controller_generate_messages_py.dir/build.make
 

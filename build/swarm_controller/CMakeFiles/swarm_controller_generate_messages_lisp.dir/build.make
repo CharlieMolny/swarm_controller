@@ -56,23 +56,17 @@ CMAKE_BINARY_DIR = /root/workspace/build
 # Include the progress variables for this target.
 include swarm_controller/CMakeFiles/swarm_controller_generate_messages_lisp.dir/progress.make
 
-swarm_controller/CMakeFiles/swarm_controller_generate_messages_lisp: /root/workspace/devel/share/common-lisp/ros/swarm_controller/msg/velocity_msg.lisp
-swarm_controller/CMakeFiles/swarm_controller_generate_messages_lisp: /root/workspace/devel/share/common-lisp/ros/swarm_controller/msg/location_msg.lisp
+swarm_controller/CMakeFiles/swarm_controller_generate_messages_lisp: /root/workspace/devel/share/common-lisp/ros/swarm_controller/msg/WheelsCmdStamped.lisp
 
 
-/root/workspace/devel/share/common-lisp/ros/swarm_controller/msg/velocity_msg.lisp: /opt/ros/melodic/lib/genlisp/gen_lisp.py
-/root/workspace/devel/share/common-lisp/ros/swarm_controller/msg/velocity_msg.lisp: /root/workspace/src/swarm_controller/msg/velocity_msg.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/root/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating Lisp code from swarm_controller/velocity_msg.msg"
-	cd /root/workspace/build/swarm_controller && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/genlisp/cmake/../../../lib/genlisp/gen_lisp.py /root/workspace/src/swarm_controller/msg/velocity_msg.msg -Iswarm_controller:/root/workspace/src/swarm_controller/msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -p swarm_controller -o /root/workspace/devel/share/common-lisp/ros/swarm_controller/msg
-
-/root/workspace/devel/share/common-lisp/ros/swarm_controller/msg/location_msg.lisp: /opt/ros/melodic/lib/genlisp/gen_lisp.py
-/root/workspace/devel/share/common-lisp/ros/swarm_controller/msg/location_msg.lisp: /root/workspace/src/swarm_controller/msg/location_msg.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/root/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Lisp code from swarm_controller/location_msg.msg"
-	cd /root/workspace/build/swarm_controller && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/genlisp/cmake/../../../lib/genlisp/gen_lisp.py /root/workspace/src/swarm_controller/msg/location_msg.msg -Iswarm_controller:/root/workspace/src/swarm_controller/msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -p swarm_controller -o /root/workspace/devel/share/common-lisp/ros/swarm_controller/msg
+/root/workspace/devel/share/common-lisp/ros/swarm_controller/msg/WheelsCmdStamped.lisp: /opt/ros/melodic/lib/genlisp/gen_lisp.py
+/root/workspace/devel/share/common-lisp/ros/swarm_controller/msg/WheelsCmdStamped.lisp: /root/workspace/src/swarm_controller/msg/WheelsCmdStamped.msg
+/root/workspace/devel/share/common-lisp/ros/swarm_controller/msg/WheelsCmdStamped.lisp: /opt/ros/melodic/share/std_msgs/msg/Header.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/root/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating Lisp code from swarm_controller/WheelsCmdStamped.msg"
+	cd /root/workspace/build/swarm_controller && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/genlisp/cmake/../../../lib/genlisp/gen_lisp.py /root/workspace/src/swarm_controller/msg/WheelsCmdStamped.msg -Iswarm_controller:/root/workspace/src/swarm_controller/msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -p swarm_controller -o /root/workspace/devel/share/common-lisp/ros/swarm_controller/msg
 
 swarm_controller_generate_messages_lisp: swarm_controller/CMakeFiles/swarm_controller_generate_messages_lisp
-swarm_controller_generate_messages_lisp: /root/workspace/devel/share/common-lisp/ros/swarm_controller/msg/velocity_msg.lisp
-swarm_controller_generate_messages_lisp: /root/workspace/devel/share/common-lisp/ros/swarm_controller/msg/location_msg.lisp
+swarm_controller_generate_messages_lisp: /root/workspace/devel/share/common-lisp/ros/swarm_controller/msg/WheelsCmdStamped.lisp
 swarm_controller_generate_messages_lisp: swarm_controller/CMakeFiles/swarm_controller_generate_messages_lisp.dir/build.make
 
 .PHONY : swarm_controller_generate_messages_lisp

@@ -1,7 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/swarm_controller_generate_messages_py"
-  "/root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_velocity_msg.py"
-  "/root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_location_msg.py"
+  "/root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/_WheelsCmdStamped.py"
   "/root/workspace/devel/lib/python2.7/dist-packages/swarm_controller/msg/__init__.py"
 )
 

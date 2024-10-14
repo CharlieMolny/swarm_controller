@@ -56,28 +56,22 @@ CMAKE_BINARY_DIR = /root/workspace/build
 # Include the progress variables for this target.
 include swarm_controller/CMakeFiles/swarm_controller_generate_messages_eus.dir/progress.make
 
-swarm_controller/CMakeFiles/swarm_controller_generate_messages_eus: /root/workspace/devel/share/roseus/ros/swarm_controller/msg/velocity_msg.l
-swarm_controller/CMakeFiles/swarm_controller_generate_messages_eus: /root/workspace/devel/share/roseus/ros/swarm_controller/msg/location_msg.l
+swarm_controller/CMakeFiles/swarm_controller_generate_messages_eus: /root/workspace/devel/share/roseus/ros/swarm_controller/msg/WheelsCmdStamped.l
 swarm_controller/CMakeFiles/swarm_controller_generate_messages_eus: /root/workspace/devel/share/roseus/ros/swarm_controller/manifest.l
 
 
-/root/workspace/devel/share/roseus/ros/swarm_controller/msg/velocity_msg.l: /opt/ros/melodic/lib/geneus/gen_eus.py
-/root/workspace/devel/share/roseus/ros/swarm_controller/msg/velocity_msg.l: /root/workspace/src/swarm_controller/msg/velocity_msg.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/root/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating EusLisp code from swarm_controller/velocity_msg.msg"
-	cd /root/workspace/build/swarm_controller && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /root/workspace/src/swarm_controller/msg/velocity_msg.msg -Iswarm_controller:/root/workspace/src/swarm_controller/msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -p swarm_controller -o /root/workspace/devel/share/roseus/ros/swarm_controller/msg
-
-/root/workspace/devel/share/roseus/ros/swarm_controller/msg/location_msg.l: /opt/ros/melodic/lib/geneus/gen_eus.py
-/root/workspace/devel/share/roseus/ros/swarm_controller/msg/location_msg.l: /root/workspace/src/swarm_controller/msg/location_msg.msg
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/root/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating EusLisp code from swarm_controller/location_msg.msg"
-	cd /root/workspace/build/swarm_controller && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /root/workspace/src/swarm_controller/msg/location_msg.msg -Iswarm_controller:/root/workspace/src/swarm_controller/msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -p swarm_controller -o /root/workspace/devel/share/roseus/ros/swarm_controller/msg
+/root/workspace/devel/share/roseus/ros/swarm_controller/msg/WheelsCmdStamped.l: /opt/ros/melodic/lib/geneus/gen_eus.py
+/root/workspace/devel/share/roseus/ros/swarm_controller/msg/WheelsCmdStamped.l: /root/workspace/src/swarm_controller/msg/WheelsCmdStamped.msg
+/root/workspace/devel/share/roseus/ros/swarm_controller/msg/WheelsCmdStamped.l: /opt/ros/melodic/share/std_msgs/msg/Header.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/root/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating EusLisp code from swarm_controller/WheelsCmdStamped.msg"
+	cd /root/workspace/build/swarm_controller && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /root/workspace/src/swarm_controller/msg/WheelsCmdStamped.msg -Iswarm_controller:/root/workspace/src/swarm_controller/msg -Istd_msgs:/opt/ros/melodic/share/std_msgs/cmake/../msg -p swarm_controller -o /root/workspace/devel/share/roseus/ros/swarm_controller/msg
 
 /root/workspace/devel/share/roseus/ros/swarm_controller/manifest.l: /opt/ros/melodic/lib/geneus/gen_eus.py
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/root/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating EusLisp manifest code for swarm_controller"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/root/workspace/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating EusLisp manifest code for swarm_controller"
 	cd /root/workspace/build/swarm_controller && ../catkin_generated/env_cached.sh /usr/bin/python2 /opt/ros/melodic/share/geneus/cmake/../../../lib/geneus/gen_eus.py -m -o /root/workspace/devel/share/roseus/ros/swarm_controller swarm_controller std_msgs
 
 swarm_controller_generate_messages_eus: swarm_controller/CMakeFiles/swarm_controller_generate_messages_eus
-swarm_controller_generate_messages_eus: /root/workspace/devel/share/roseus/ros/swarm_controller/msg/velocity_msg.l
-swarm_controller_generate_messages_eus: /root/workspace/devel/share/roseus/ros/swarm_controller/msg/location_msg.l
+swarm_controller_generate_messages_eus: /root/workspace/devel/share/roseus/ros/swarm_controller/msg/WheelsCmdStamped.l
 swarm_controller_generate_messages_eus: /root/workspace/devel/share/roseus/ros/swarm_controller/manifest.l
 swarm_controller_generate_messages_eus: swarm_controller/CMakeFiles/swarm_controller_generate_messages_eus.dir/build.make
 

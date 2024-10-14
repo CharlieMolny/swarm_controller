@@ -1,37 +1,46 @@
 <launch>
 
-        <rosparam file="$(find swarm_controller)/config/params.yaml" />
-          <!-- Launch velocity_bridge_node with a unique name -->
+    <rosparam file="$(find swarm_controller)/config/params.yaml" />
+    
     <node pkg="swarm_controller" 
           type="local_velocity_sender.py" 
           name="velocity_bridge_node_1" 
           output="screen"
           launch-prefix="bash -c 'sleep 2; $0 $@'">
 
+         <env name= "ROS_MASTER_URI" value = "http://192.168.21.187:11311"/>
     </node>
 
-    <!-- Launch slot_controller_node -->
+    <node pkg="swarm_controller" 
+          type="local_velocity_sender.py" 
+          name="velocity_bridge_node_2" 
+          output="screen"
+          launch-prefix="bash -c 'sleep 2; $0 $@'">
+  
+          <env name= "ROS_MASTER_URI" value = "http://192.168.21.205:11311"/>
+    </node>
+
     <node pkg="swarm_controller" 
           type="slot_controller_node.py" 
           name="slot_controller_node_1" 
+          output="screen">
+    </node>
+
+    <node pkg="swarm_controller" 
+          type="external_location_listener_node.py" 
+          name="location_bridge_node1" 
           output="screen"
           launch-prefix="bash -c 'sleep 2; $0 $@'">
 
+         <env name= "ROS_MASTER_URI" value = "http://192.168.21.187:11311"/>
     </node>
 
-    <!-- Launch location_bridge_node with a unique name -->
-      <node pkg="swarm_controller" 
-            type="external_location_listener_node.py" 
-            name="location_bridge_node" 
-            output="screen" 
-            launch-prefix="bash -c 'sleep 2; $0 $@'">
+    <node pkg="swarm_controller" 
+          type="external_location_listener_node.py" 
+          name="location_bridge_node2" 
+          output="screen"
+          launch-prefix="bash -c 'sleep 2; $0 $@'">
 
-
-
-      </node>
-
-
-
+         <env name= "ROS_MASTER_URI" value = "http://192.168.21.205:11311"/>
+    </node>
 </launch>
-
-

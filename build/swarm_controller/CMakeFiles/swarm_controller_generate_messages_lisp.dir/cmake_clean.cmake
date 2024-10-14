@@ -1,7 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/swarm_controller_generate_messages_lisp"
-  "/root/workspace/devel/share/common-lisp/ros/swarm_controller/msg/velocity_msg.lisp"
-  "/root/workspace/devel/share/common-lisp/ros/swarm_controller/msg/location_msg.lisp"
+  "/root/workspace/devel/share/common-lisp/ros/swarm_controller/msg/WheelsCmdStamped.lisp"
 )
 
 # Per-language clean rules from dependency scanning.

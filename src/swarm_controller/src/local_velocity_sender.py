@@ -4,34 +4,56 @@ import socket
 import os
 from std_msgs.msg import String
 
-class LocalVelocitySender:
-    def __init__(self):
+import json 
 
-        self.vehicle_name = rospy.get_param('vehicle_name', 'not set')
-        self.duckie_ros_uri = rospy.get_param('ros_master_uri','not set')
-        self.socket_num = rospy.get_param('velocity_sender_server_socket_number',None)
-  
-        os.environ["ROS_MASTER_URI"] = self.duckie_ros_uri
-        rospy.init_node('external_velocity_sender', anonymous=True)
-        self.vehicle_name = "duckie1"
-        self.topic = "/{}/velocity".format(self.vehicle_name)
+
+class LocalVelocitySender:
+    def __init__(self,params):
+        print("velocity sender initialised ")
+
+        rospy.init_node('external_velocity_sender')
+
+
+        self.node_name = rospy.get_name()
+
+        self.vehicle_number = int(self.node_name[-1])-1
+
+        
+        self.vehicle_names = params["vehicle_names"]
+        self.vehicle_name =self.vehicle_names[self.vehicle_number]
+
+        
+        self.socket_nums = params["velocity_sender_server_sockets"]
+        
+        self.socket_num = self.socket_nums[self.vehicle_number]
+                
+
+        self.topic ="/{}/velocity".format(self.vehicle_name)
 
         self.velocity_publisher = rospy.Publisher(self.topic, String, queue_size=1)
-        rospy.loginfo("Velocity sender initialized")
+
+        print("parameters set ")      
+
+        self.should_move = False
+        self.velocity = 0.0
+        self.rate = rospy.Rate(10)  
+
         self.start_socket_server()
+        print("velocity node initialised ")
+
 
     def start_socket_server(self):
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            socket_num = 5010
-            s.bind(('0.0.0.0', socket_num))  
+
+            s.bind(('0.0.0.0', self.socket_num))  
             s.listen(1)  
-            rospy.loginfo("Listening for incoming data on socket...{}".format(socket_num))
+            rospy.loginfo("Listening for incoming data on socket...{}".format(self.socket_num))
             
             conn, addr = s.accept() 
             rospy.loginfo("Connected by {}".format(addr))
         except socket.error as e:
-            rospy.logerr("Socket error during setup: {}".format(e))
+            rospy.logerr("Socket {} error during setup: {}".format(self.socket_num,e))
             return
 
         try:
@@ -39,12 +61,12 @@ class LocalVelocitySender:
                 try:
                     data = conn.recv(1024) 
                     if data:
-                        rospy.loginfo("Received velocity data from external node: {}".format(data.decode('utf-8')))
+                        rospy.loginfo("{} Received velocity data from external node: {}".format(self.vehicle_name,data.decode('utf-8')))
                         self.velocity_publisher.publish(data.decode('utf-8'))
                     else:
                         break  
                 except socket.error as e:
-                    rospy.logerr("Socket {} error during data reception: {}".format(socket_num,e))
+                    rospy.logerr("Socket {} error during data reception: {}".format(self.socket_num,e))
                     break
         finally:
             conn.close() 
@@ -64,7 +86,12 @@ class LocalVelocitySender:
 
 if __name__ == '__main__':
     try:
-        sender = LocalVelocitySender()
+        params ={
+    "vehicle_names": ["duckie3", "duckie2"],
+    "velocity_sender_server_sockets": [5021, 5023],
+    "slot_controller_server_socket_number": 5002
+            }
+        sender = LocalVelocitySender(params)
         rospy.spin()
     except rospy.ROSInterruptException:
         rospy.loginfo("Node interrupted and shutting down.")

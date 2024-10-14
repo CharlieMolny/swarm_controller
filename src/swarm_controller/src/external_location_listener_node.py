@@ -3,24 +3,65 @@ import rospy
 import socket
 import os
 from std_msgs.msg import String
+import json
+
+
+def load_json(file_path):
+    """
+    Opens and loads a JSON file from the given file path (Python 2 compatible).
+
+    :param file_path: The path to the JSON file.
+    :return: The data loaded from the JSON file.
+    """
+    try:
+        with open(file_path, 'r') as json_file:
+            content = json_file.read()
+            print("File content:".format( content) ) # Use print statement without parentheses in Python 2
+            data = json.loads(content)
+            return data
+    except IOError:
+        print("Error: The file {} was not found.".format(file_path))
+        return None
+    except ValueError as e:
+        print("Error: Failed to decode JSON: {}".format(e))
+        return None
+    except Exception as e:
+        print("An error occurred: {}".format(e))
+        return None
+
 
 class ExternalLocationListener:
-    def __init__(self):
-        self.vehicle_name = rospy.get_param('vehicle_name', 'not set')
+    def __init__(self,params):
+        print("beginning initialising location node ")
+        rospy.init_node('external_location_listener')
 
-        self.duckie_ros_uri = rospy.get_param('ros_master_uri','not set')
-        self.socket_num = rospy.get_param('slot_controller_server_socket_number',None)
+        self.node_name = rospy.get_name()
 
-        #self.duckie_ros_uri =  "http://192.168.158.187:11311"
+        self.vehicle_number = int(self.node_name[-1])-1
+        
+
+        self.vehicle_names = params["vehicle_names"]
+        self.vehicle_name =self.vehicle_names[self.vehicle_number]
+
+        self.socket_num = params['slot_controller_server_socket_number']
+
+        print("location parameters set ")
+
+        # rospy.loginfo(" vehcile number: {}   Ros master uri: {} ".format(self.vehicle_number,os.environ["ROS_MASTER_URI"]) )
+    
         self.external_location_topic = '/{}/location'.format(self.vehicle_name)
 
-        os.environ["ROS_MASTER_URI"] = self.duckie_ros_uri
-        rospy.init_node('external_location_listener', anonymous=True)
+        
+
+        
+        
         rospy.Subscriber(self.external_location_topic, String, self.location_callback)
         self.s = None
-        self.socket_num = 5000
+        
         
         self.initilise_local_node_connection()
+
+        
     
     def initilise_local_node_connection(self):
         try:
@@ -28,7 +69,7 @@ class ExternalLocationListener:
             self.s.connect(('localhost', self.socket_num))  # Connect to the local node once
             rospy.loginfo("Connected to the local node on port {}".format(self.socket_num))
         except socket.error as e:
-            rospy.logerr("Socket connection failed: {}".format(e))
+            rospy.logerr("Socket {} connection failed: {}".format(self.socket_num,e))
         
 
     def location_callback(self, msg):
@@ -61,5 +102,11 @@ class ExternalLocationListener:
 
 if __name__ == '__main__':
     vehicle_name = "duckie1"
-    listener = ExternalLocationListener()
+    params ={
+    "vehicle_names": ["duckie3", "duckie2"],
+    "velocity_sender_server_sockets": [5021, 5022],
+    "slot_controller_server_socket_number": 5002
+            }
+    
+    listener = ExternalLocationListener(params)
     rospy.spin()

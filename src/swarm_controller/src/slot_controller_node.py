@@ -2,13 +2,9 @@
 import rospy
 from std_msgs.msg import String
 from slot_environment import slotEnvironment
-import json
 import socket,select
 
-def load_config(config_path):
-    with open(config_path) as f:
-        data = json.loads(f.read())
-    return data
+
 
 
 class slotControllerNode:
@@ -16,38 +12,54 @@ class slotControllerNode:
         rospy.init_node('listener_node', anonymous=True)
         self.slot_env = slotEnvironment(slot_length, slot_gap, num_lanes, lane_velocities, lane_width, road_length, num_slots_per_lane, frequency)
 
-
         self.lane_velocities =lane_velocities
-
- 
         self.frequency = frequency
         self.dt = 1/self.frequency
         self.rate = rospy.Rate(frequency)
 
 
+        self.vehicle_names = rospy.get_param('vehicle_names', [])
 
-        self.velocity_s =None
-        self.location_socket_num =rospy.get_param('slot_controller_server_socket_number',None)
-        # self.location_socket_num = 5000
-        self.velocity_socket_num = rospy.get_param('velocity_sender_server_socket_number',None)
+        self.location_socket_num = rospy.get_param('slot_controller_server_socket_number')
+
+        self.socket_num_dict = {}
+        self.socket_connection_dict = {}
 
 
-
-
-    def initilise_local_node_connection(self):
+        for i,vehicle in enumerate(self.vehicle_names):
+            socket_num = rospy.get_param('velocity_sender_server_socket_number_{}'.format(i), None)
+            if socket_num is not None:
+                self.socket_num_dict[vehicle] = socket_num
+            else:
+                rospy.logwarn("No socket number found for {}".format(vehicle))
         
-        try:
-            self.velocity_s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.velocity_s.connect(('localhost', self.velocity_socket_num))  # Connect to the local node once
-            rospy.loginfo("Connected to the local node on port {}".format(self.velocity_socket_num))
-        except socket.error as e:
-            rospy.logerr("Socket {} connection failed: {}".format(self.velocity_socket_num,e))
+  
+            
 
+    def initialize_local_node_connection(self, vehicle):
+        try:
+            socket_num = self.socket_num_dict.get(vehicle, None)
+
+            if socket_num is not None:
+                velocity_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                velocity_socket.connect(('localhost', socket_num))
+                self.socket_connection_dict[vehicle] = velocity_socket
+
+                rospy.loginfo("Connected to the local node for {} on port {}".format(vehicle, socket_num))
+            else:
+                rospy.logerr("Socket number for vehicle {} not found!".format(vehicle))
+        except socket.error as e:
+            rospy.logerr("Socket connection for vehicle {} on port {} failed: {}".format(vehicle, socket_num, e))
+
+
+    def get_vehicle_socket(self, vehicle):
+        return self.socket_connection_dict.get(vehicle, None)
 
             
     def run(self):
-        # Create the socket
+
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
         s.bind(('localhost', self.location_socket_num)) 
         s.listen(1)
         s.setblocking(0)
@@ -81,28 +93,37 @@ class slotControllerNode:
             self.rate.sleep()
             
     def vehicle_data_recieved(self,data):
-        velocity = self.slot_env.find_veloctity(data)
-        rospy.loginfo("velocity value is {}".format(velocity))
-        self.send_to_local_node(velocity)
-    
+        velocity,vehcile_name = self.slot_env.find_veloctity(data)
+        rospy.loginfo("{} velocity value is {}".format(vehcile_name,velocity))
+        self.send_to_local_node(velocity,vehcile_name)
 
-    def send_to_local_node(self, velocity_data):
+
+    def send_to_local_node(self, velocity_data,vehicle):
         try:
-            if self.velocity_s is None:
-                self.initilise_local_node_connection()
- 
-            self.velocity_s.send(str(velocity_data).encode('utf-8'))
+            socket_connection = self.get_vehicle_socket(vehicle)
+            if socket_connection is None:
+                self.initialize_local_node_connection(vehicle)
+                socket_connection = self.get_vehicle_socket(vehicle)
+
+            socket_connection.send(str(velocity_data).encode('utf-8'))
+            rospy.loginfo("{} velocity data sent ".format(vehicle))
         except socket.error as e:
-            rospy.logerr("Socket {} connection failed: {}".format(self.velocity_socket_num,e))
-            # self.velocity_s.close()
-            self.velocity_s = None
+            rospy.logerr("Socket {} connection failed: {}".format(self.velocity_socket_num,e)) 
+            
     
 
-    def close_socket(self):
-        if self.velocity_s:
-            self.velocity_s.close()
-            self.velocity_s = None
-            rospy.loginfo("Closed socket connection")
+    def close_sockets(self):
+        for vehicle, velocity_socket in self.socket_connection_dict.items():
+            if velocity_socket:
+                try:
+                    velocity_socket.close()
+                    rospy.loginfo("Closed socket connection for {}".format(vehicle))
+                except socket.error as e:
+                    rospy.logerr("Failed to close socket for {}: {}".format(vehicle, e))
+        
+        self.socket_connection_dict.clear()
+        rospy.loginfo("All socket connections have been closed")
+
 
 
 

@@ -94,6 +94,17 @@ rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+
+.PHONY : test/fast
+
 # Special rule for the target list_install_components
 list_install_components:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
@@ -126,17 +137,6 @@ install/fast: preinstall/fast
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
 	/usr/bin/cmake -P cmake_install.cmake
 .PHONY : install/fast
-
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
-	/usr/bin/ctest --force-new-ctest-process $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-
-.PHONY : test/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -171,6 +171,96 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+swarm_controller/CMakeFiles/swarm_controller_generate_messages_py.dir/rule:
+	cd /root/workspace/build && $(MAKE) -f CMakeFiles/Makefile2 swarm_controller/CMakeFiles/swarm_controller_generate_messages_py.dir/rule
+.PHONY : swarm_controller/CMakeFiles/swarm_controller_generate_messages_py.dir/rule
+
+# Convenience name for target.
+swarm_controller_generate_messages_py: swarm_controller/CMakeFiles/swarm_controller_generate_messages_py.dir/rule
+
+.PHONY : swarm_controller_generate_messages_py
+
+# fast build rule for target.
+swarm_controller_generate_messages_py/fast:
+	cd /root/workspace/build && $(MAKE) -f swarm_controller/CMakeFiles/swarm_controller_generate_messages_py.dir/build.make swarm_controller/CMakeFiles/swarm_controller_generate_messages_py.dir/build
+.PHONY : swarm_controller_generate_messages_py/fast
+
+# Convenience name for target.
+swarm_controller/CMakeFiles/swarm_controller_gennodejs.dir/rule:
+	cd /root/workspace/build && $(MAKE) -f CMakeFiles/Makefile2 swarm_controller/CMakeFiles/swarm_controller_gennodejs.dir/rule
+.PHONY : swarm_controller/CMakeFiles/swarm_controller_gennodejs.dir/rule
+
+# Convenience name for target.
+swarm_controller_gennodejs: swarm_controller/CMakeFiles/swarm_controller_gennodejs.dir/rule
+
+.PHONY : swarm_controller_gennodejs
+
+# fast build rule for target.
+swarm_controller_gennodejs/fast:
+	cd /root/workspace/build && $(MAKE) -f swarm_controller/CMakeFiles/swarm_controller_gennodejs.dir/build.make swarm_controller/CMakeFiles/swarm_controller_gennodejs.dir/build
+.PHONY : swarm_controller_gennodejs/fast
+
+# Convenience name for target.
+swarm_controller/CMakeFiles/swarm_controller_generate_messages_lisp.dir/rule:
+	cd /root/workspace/build && $(MAKE) -f CMakeFiles/Makefile2 swarm_controller/CMakeFiles/swarm_controller_generate_messages_lisp.dir/rule
+.PHONY : swarm_controller/CMakeFiles/swarm_controller_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+swarm_controller_generate_messages_lisp: swarm_controller/CMakeFiles/swarm_controller_generate_messages_lisp.dir/rule
+
+.PHONY : swarm_controller_generate_messages_lisp
+
+# fast build rule for target.
+swarm_controller_generate_messages_lisp/fast:
+	cd /root/workspace/build && $(MAKE) -f swarm_controller/CMakeFiles/swarm_controller_generate_messages_lisp.dir/build.make swarm_controller/CMakeFiles/swarm_controller_generate_messages_lisp.dir/build
+.PHONY : swarm_controller_generate_messages_lisp/fast
+
+# Convenience name for target.
+swarm_controller/CMakeFiles/swarm_controller_geneus.dir/rule:
+	cd /root/workspace/build && $(MAKE) -f CMakeFiles/Makefile2 swarm_controller/CMakeFiles/swarm_controller_geneus.dir/rule
+.PHONY : swarm_controller/CMakeFiles/swarm_controller_geneus.dir/rule
+
+# Convenience name for target.
+swarm_controller_geneus: swarm_controller/CMakeFiles/swarm_controller_geneus.dir/rule
+
+.PHONY : swarm_controller_geneus
+
+# fast build rule for target.
+swarm_controller_geneus/fast:
+	cd /root/workspace/build && $(MAKE) -f swarm_controller/CMakeFiles/swarm_controller_geneus.dir/build.make swarm_controller/CMakeFiles/swarm_controller_geneus.dir/build
+.PHONY : swarm_controller_geneus/fast
+
+# Convenience name for target.
+swarm_controller/CMakeFiles/swarm_controller_gencpp.dir/rule:
+	cd /root/workspace/build && $(MAKE) -f CMakeFiles/Makefile2 swarm_controller/CMakeFiles/swarm_controller_gencpp.dir/rule
+.PHONY : swarm_controller/CMakeFiles/swarm_controller_gencpp.dir/rule
+
+# Convenience name for target.
+swarm_controller_gencpp: swarm_controller/CMakeFiles/swarm_controller_gencpp.dir/rule
+
+.PHONY : swarm_controller_gencpp
+
+# fast build rule for target.
+swarm_controller_gencpp/fast:
+	cd /root/workspace/build && $(MAKE) -f swarm_controller/CMakeFiles/swarm_controller_gencpp.dir/build.make swarm_controller/CMakeFiles/swarm_controller_gencpp.dir/build
+.PHONY : swarm_controller_gencpp/fast
+
+# Convenience name for target.
+swarm_controller/CMakeFiles/_swarm_controller_generate_messages_check_deps_WheelsCmdStamped.dir/rule:
+	cd /root/workspace/build && $(MAKE) -f CMakeFiles/Makefile2 swarm_controller/CMakeFiles/_swarm_controller_generate_messages_check_deps_WheelsCmdStamped.dir/rule
+.PHONY : swarm_controller/CMakeFiles/_swarm_controller_generate_messages_check_deps_WheelsCmdStamped.dir/rule
+
+# Convenience name for target.
+_swarm_controller_generate_messages_check_deps_WheelsCmdStamped: swarm_controller/CMakeFiles/_swarm_controller_generate_messages_check_deps_WheelsCmdStamped.dir/rule
+
+.PHONY : _swarm_controller_generate_messages_check_deps_WheelsCmdStamped
+
+# fast build rule for target.
+_swarm_controller_generate_messages_check_deps_WheelsCmdStamped/fast:
+	cd /root/workspace/build && $(MAKE) -f swarm_controller/CMakeFiles/_swarm_controller_generate_messages_check_deps_WheelsCmdStamped.dir/build.make swarm_controller/CMakeFiles/_swarm_controller_generate_messages_check_deps_WheelsCmdStamped.dir/build
+.PHONY : _swarm_controller_generate_messages_check_deps_WheelsCmdStamped/fast
+
+# Convenience name for target.
 swarm_controller/CMakeFiles/roscpp_generate_messages_py.dir/rule:
 	cd /root/workspace/build && $(MAKE) -f CMakeFiles/Makefile2 swarm_controller/CMakeFiles/roscpp_generate_messages_py.dir/rule
 .PHONY : swarm_controller/CMakeFiles/roscpp_generate_messages_py.dir/rule
@@ -184,6 +274,21 @@ roscpp_generate_messages_py: swarm_controller/CMakeFiles/roscpp_generate_message
 roscpp_generate_messages_py/fast:
 	cd /root/workspace/build && $(MAKE) -f swarm_controller/CMakeFiles/roscpp_generate_messages_py.dir/build.make swarm_controller/CMakeFiles/roscpp_generate_messages_py.dir/build
 .PHONY : roscpp_generate_messages_py/fast
+
+# Convenience name for target.
+swarm_controller/CMakeFiles/swarm_controller_generate_messages_nodejs.dir/rule:
+	cd /root/workspace/build && $(MAKE) -f CMakeFiles/Makefile2 swarm_controller/CMakeFiles/swarm_controller_generate_messages_nodejs.dir/rule
+.PHONY : swarm_controller/CMakeFiles/swarm_controller_generate_messages_nodejs.dir/rule
+
+# Convenience name for target.
+swarm_controller_generate_messages_nodejs: swarm_controller/CMakeFiles/swarm_controller_generate_messages_nodejs.dir/rule
+
+.PHONY : swarm_controller_generate_messages_nodejs
+
+# fast build rule for target.
+swarm_controller_generate_messages_nodejs/fast:
+	cd /root/workspace/build && $(MAKE) -f swarm_controller/CMakeFiles/swarm_controller_generate_messages_nodejs.dir/build.make swarm_controller/CMakeFiles/swarm_controller_generate_messages_nodejs.dir/build
+.PHONY : swarm_controller_generate_messages_nodejs/fast
 
 # Convenience name for target.
 swarm_controller/CMakeFiles/roscpp_generate_messages_eus.dir/rule:
@@ -201,6 +306,21 @@ roscpp_generate_messages_eus/fast:
 .PHONY : roscpp_generate_messages_eus/fast
 
 # Convenience name for target.
+swarm_controller/CMakeFiles/swarm_controller_generate_messages_eus.dir/rule:
+	cd /root/workspace/build && $(MAKE) -f CMakeFiles/Makefile2 swarm_controller/CMakeFiles/swarm_controller_generate_messages_eus.dir/rule
+.PHONY : swarm_controller/CMakeFiles/swarm_controller_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+swarm_controller_generate_messages_eus: swarm_controller/CMakeFiles/swarm_controller_generate_messages_eus.dir/rule
+
+.PHONY : swarm_controller_generate_messages_eus
+
+# fast build rule for target.
+swarm_controller_generate_messages_eus/fast:
+	cd /root/workspace/build && $(MAKE) -f swarm_controller/CMakeFiles/swarm_controller_generate_messages_eus.dir/build.make swarm_controller/CMakeFiles/swarm_controller_generate_messages_eus.dir/build
+.PHONY : swarm_controller_generate_messages_eus/fast
+
+# Convenience name for target.
 swarm_controller/CMakeFiles/roscpp_generate_messages_lisp.dir/rule:
 	cd /root/workspace/build && $(MAKE) -f CMakeFiles/Makefile2 swarm_controller/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
 .PHONY : swarm_controller/CMakeFiles/roscpp_generate_messages_lisp.dir/rule
@@ -214,6 +334,21 @@ roscpp_generate_messages_lisp: swarm_controller/CMakeFiles/roscpp_generate_messa
 roscpp_generate_messages_lisp/fast:
 	cd /root/workspace/build && $(MAKE) -f swarm_controller/CMakeFiles/roscpp_generate_messages_lisp.dir/build.make swarm_controller/CMakeFiles/roscpp_generate_messages_lisp.dir/build
 .PHONY : roscpp_generate_messages_lisp/fast
+
+# Convenience name for target.
+swarm_controller/CMakeFiles/swarm_controller_genlisp.dir/rule:
+	cd /root/workspace/build && $(MAKE) -f CMakeFiles/Makefile2 swarm_controller/CMakeFiles/swarm_controller_genlisp.dir/rule
+.PHONY : swarm_controller/CMakeFiles/swarm_controller_genlisp.dir/rule
+
+# Convenience name for target.
+swarm_controller_genlisp: swarm_controller/CMakeFiles/swarm_controller_genlisp.dir/rule
+
+.PHONY : swarm_controller_genlisp
+
+# fast build rule for target.
+swarm_controller_genlisp/fast:
+	cd /root/workspace/build && $(MAKE) -f swarm_controller/CMakeFiles/swarm_controller_genlisp.dir/build.make swarm_controller/CMakeFiles/swarm_controller_genlisp.dir/build
+.PHONY : swarm_controller_genlisp/fast
 
 # Convenience name for target.
 swarm_controller/CMakeFiles/rosgraph_msgs_generate_messages_cpp.dir/rule:
@@ -289,6 +424,51 @@ rosgraph_msgs_generate_messages_lisp: swarm_controller/CMakeFiles/rosgraph_msgs_
 rosgraph_msgs_generate_messages_lisp/fast:
 	cd /root/workspace/build && $(MAKE) -f swarm_controller/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build.make swarm_controller/CMakeFiles/rosgraph_msgs_generate_messages_lisp.dir/build
 .PHONY : rosgraph_msgs_generate_messages_lisp/fast
+
+# Convenience name for target.
+swarm_controller/CMakeFiles/swarm_controller_genpy.dir/rule:
+	cd /root/workspace/build && $(MAKE) -f CMakeFiles/Makefile2 swarm_controller/CMakeFiles/swarm_controller_genpy.dir/rule
+.PHONY : swarm_controller/CMakeFiles/swarm_controller_genpy.dir/rule
+
+# Convenience name for target.
+swarm_controller_genpy: swarm_controller/CMakeFiles/swarm_controller_genpy.dir/rule
+
+.PHONY : swarm_controller_genpy
+
+# fast build rule for target.
+swarm_controller_genpy/fast:
+	cd /root/workspace/build && $(MAKE) -f swarm_controller/CMakeFiles/swarm_controller_genpy.dir/build.make swarm_controller/CMakeFiles/swarm_controller_genpy.dir/build
+.PHONY : swarm_controller_genpy/fast
+
+# Convenience name for target.
+swarm_controller/CMakeFiles/swarm_controller_generate_messages_cpp.dir/rule:
+	cd /root/workspace/build && $(MAKE) -f CMakeFiles/Makefile2 swarm_controller/CMakeFiles/swarm_controller_generate_messages_cpp.dir/rule
+.PHONY : swarm_controller/CMakeFiles/swarm_controller_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+swarm_controller_generate_messages_cpp: swarm_controller/CMakeFiles/swarm_controller_generate_messages_cpp.dir/rule
+
+.PHONY : swarm_controller_generate_messages_cpp
+
+# fast build rule for target.
+swarm_controller_generate_messages_cpp/fast:
+	cd /root/workspace/build && $(MAKE) -f swarm_controller/CMakeFiles/swarm_controller_generate_messages_cpp.dir/build.make swarm_controller/CMakeFiles/swarm_controller_generate_messages_cpp.dir/build
+.PHONY : swarm_controller_generate_messages_cpp/fast
+
+# Convenience name for target.
+swarm_controller/CMakeFiles/swarm_controller_generate_messages.dir/rule:
+	cd /root/workspace/build && $(MAKE) -f CMakeFiles/Makefile2 swarm_controller/CMakeFiles/swarm_controller_generate_messages.dir/rule
+.PHONY : swarm_controller/CMakeFiles/swarm_controller_generate_messages.dir/rule
+
+# Convenience name for target.
+swarm_controller_generate_messages: swarm_controller/CMakeFiles/swarm_controller_generate_messages.dir/rule
+
+.PHONY : swarm_controller_generate_messages
+
+# fast build rule for target.
+swarm_controller_generate_messages/fast:
+	cd /root/workspace/build && $(MAKE) -f swarm_controller/CMakeFiles/swarm_controller_generate_messages.dir/build.make swarm_controller/CMakeFiles/swarm_controller_generate_messages.dir/build
+.PHONY : swarm_controller_generate_messages/fast
 
 # Convenience name for target.
 swarm_controller/CMakeFiles/std_msgs_generate_messages_cpp.dir/rule:
@@ -404,17 +584,30 @@ help:
 	@echo "... install/strip"
 	@echo "... install/local"
 	@echo "... rebuild_cache"
+	@echo "... test"
+	@echo "... swarm_controller_generate_messages_py"
+	@echo "... swarm_controller_gennodejs"
+	@echo "... swarm_controller_generate_messages_lisp"
+	@echo "... swarm_controller_geneus"
+	@echo "... swarm_controller_gencpp"
+	@echo "... _swarm_controller_generate_messages_check_deps_WheelsCmdStamped"
 	@echo "... list_install_components"
 	@echo "... roscpp_generate_messages_py"
+	@echo "... swarm_controller_generate_messages_nodejs"
 	@echo "... roscpp_generate_messages_eus"
 	@echo "... edit_cache"
+	@echo "... swarm_controller_generate_messages_eus"
 	@echo "... roscpp_generate_messages_lisp"
+	@echo "... swarm_controller_genlisp"
 	@echo "... rosgraph_msgs_generate_messages_cpp"
 	@echo "... std_msgs_generate_messages_lisp"
 	@echo "... roscpp_generate_messages_cpp"
 	@echo "... install"
 	@echo "... rosgraph_msgs_generate_messages_eus"
 	@echo "... rosgraph_msgs_generate_messages_lisp"
+	@echo "... swarm_controller_genpy"
+	@echo "... swarm_controller_generate_messages_cpp"
+	@echo "... swarm_controller_generate_messages"
 	@echo "... std_msgs_generate_messages_cpp"
 	@echo "... rosgraph_msgs_generate_messages_nodejs"
 	@echo "... rosgraph_msgs_generate_messages_py"
@@ -422,7 +615,6 @@ help:
 	@echo "... std_msgs_generate_messages_nodejs"
 	@echo "... roscpp_generate_messages_nodejs"
 	@echo "... std_msgs_generate_messages_py"
-	@echo "... test"
 .PHONY : help
 
 

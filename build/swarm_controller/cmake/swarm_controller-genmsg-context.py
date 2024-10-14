@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
-messages_str = "/root/workspace/src/swarm_controller/msg/velocity_msg.msg;/root/workspace/src/swarm_controller/msg/location_msg.msg"
+messages_str = "/root/workspace/src/swarm_controller/msg/WheelsCmdStamped.msg"
 services_str = ""
 pkg_name = "swarm_controller"
 dependencies_str = "std_msgs"
