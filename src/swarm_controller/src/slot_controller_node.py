@@ -106,7 +106,7 @@ class slotControllerNode:
                 socket_connection = self.get_vehicle_socket(vehicle)
 
             socket_connection.send(str(velocity_data).encode('utf-8'))
-            rospy.loginfo("{} velocity data sent ".format(vehicle))
+
         except socket.error as e:
             rospy.logerr("Socket {} connection failed: {}".format(self.velocity_socket_num,e)) 
             

@@ -76,7 +76,7 @@ class velocityBridgeNode:
 
 
     def velocity_callback(self, msg):
-        rospy.loginfo("Received velocity data: {}".format(msg.data))
+        # rospy.loginfo("Received velocity data: {}".format(msg.data))
         self.velocity.value = msg.data
         self.velocity_received_event.set()  
 

@@ -6,29 +6,6 @@ from std_msgs.msg import String
 import json
 
 
-def load_json(file_path):
-    """
-    Opens and loads a JSON file from the given file path (Python 2 compatible).
-
-    :param file_path: The path to the JSON file.
-    :return: The data loaded from the JSON file.
-    """
-    try:
-        with open(file_path, 'r') as json_file:
-            content = json_file.read()
-            print("File content:".format( content) ) # Use print statement without parentheses in Python 2
-            data = json.loads(content)
-            return data
-    except IOError:
-        print("Error: The file {} was not found.".format(file_path))
-        return None
-    except ValueError as e:
-        print("Error: Failed to decode JSON: {}".format(e))
-        return None
-    except Exception as e:
-        print("An error occurred: {}".format(e))
-        return None
-
 
 class ExternalLocationListener:
     def __init__(self,params):
@@ -45,15 +22,8 @@ class ExternalLocationListener:
 
         self.socket_num = params['slot_controller_server_socket_number']
 
-        print("location parameters set ")
-
-        # rospy.loginfo(" vehcile number: {}   Ros master uri: {} ".format(self.vehicle_number,os.environ["ROS_MASTER_URI"]) )
     
         self.external_location_topic = '/{}/location'.format(self.vehicle_name)
-
-        
-
-        
         
         rospy.Subscriber(self.external_location_topic, String, self.location_callback)
         self.s = None
@@ -73,7 +43,7 @@ class ExternalLocationListener:
         
 
     def location_callback(self, msg):
-        rospy.loginfo("Received external location data: {}".format(msg.data))
+
         self.send_to_local_node(msg.data)
 
     def send_to_local_node(self, location_data):
@@ -104,7 +74,7 @@ if __name__ == '__main__':
     vehicle_name = "duckie1"
     params ={
     "vehicle_names": ["duckie3", "duckie2"],
-    "velocity_sender_server_sockets": [5021, 5022],
+    "velocity_sender_server_sockets": [5021, 5023],
     "slot_controller_server_socket_number": 5002
             }
     

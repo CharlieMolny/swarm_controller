@@ -61,7 +61,7 @@ class LocalVelocitySender:
                 try:
                     data = conn.recv(1024) 
                     if data:
-                        rospy.loginfo("{} Received velocity data from external node: {}".format(self.vehicle_name,data.decode('utf-8')))
+                        # rospy.loginfo("{} Received velocity data from external node: {}".format(self.vehicle_name,data.decode('utf-8')))
                         self.velocity_publisher.publish(data.decode('utf-8'))
                     else:
                         break  

@@ -1,7 +1,7 @@
 import math
 import rospy
 import re
-
+import time
 
 class Slot:
     def __init__(self, id, lane, location={}, reserved=False, filled=False):
@@ -46,11 +46,14 @@ class slotEnvironment:
         self.num_slots_per_lane = num_slots_per_lane
         self.frequency = frequency
         self.dt = 1/self.frequency
-        self.max_acceleration = 0.03
-        self.max_deceleration = -0.03
+        self.max_acceleration = 0.005
+        self.max_deceleration = -0.005
         self.threshold = 0.03
         self.trajectories = {}
         self.in_slot_counter ={}
+        self.diff_tracker={}
+        self.timers= {}
+
         self.generate_slots()
 
     def generate_slots(self):
@@ -111,43 +114,81 @@ class slotEnvironment:
 
     def find_veloctity(self,data):
  
-        vehicle_name,lane,vehcile_location = self.parse_data(data)
+        vehicle_name,lane,vehicle_location = self.parse_data(data)
         if vehicle_name not in self.in_slot_counter:
             self.in_slot_counter[vehicle_name] = 0
-
-        
+   
         
         if vehicle_name not in self.trajectories:
             print("trajectories are {}".format(self.trajectories))
-            self.assign_near_slot(vehcile_location,vehicle_name,lane)
+            diff,nearest_slot_id=self.assign_near_slot(vehicle_location,vehicle_name,lane)
+   
+            
 
         slot_id = self.trajectories[vehicle_name]['target_slot_id']
-        slot_x_location = self.slots[slot_id]['location']['x']
-        diff= abs(slot_x_location-vehcile_location['x'])
-        # if (diff>abs(self.trajectories[vehicle_name]['current_difference'])) and not self.trajectories[vehicle_name]['in_slot']:     
-        #     self.assign_near_slot(vehcile_location,vehicle_name,lane)
 
-        if (diff<=self.threshold):
+        slot_x_location = self.slots[slot_id]['location']['x']
+        diff= abs(slot_x_location-vehicle_location['x'])
+
+        if not self.trajectories[vehicle_name]['in_slot']:
+            if vehicle_name not in self.diff_tracker :
+                self.diff_tracker[vehicle_name]= [diff]
+            else:
+                self.diff_tracker[vehicle_name].append(diff)
+
+        rospy.loginfo("{}'s diff is {}".format(vehicle_name,diff))
+
+
+        if (diff<=self.threshold) and not self.trajectories[vehicle_name]['in_slot']:
             self.trajectories[vehicle_name]['in_slot'] = True
             rospy.loginfo("{}  has caught up its slot".format(vehicle_name))
+            self.timers[vehicle_name]=time.time()+1.5
+
         elif self.trajectories[vehicle_name]['in_slot']:
             if self.in_slot_counter[vehicle_name]%5 and diff>2*self.threshold==0:
-                self.assign_near_slot(vehcile_location,vehicle_name,lane)
+                rospy.loginfo("{} is no longer in slot, reassigning vehicle".format(vehicle_name))
+                current_velocity = self.trajectories[vehicle_name]['v_(i-1)']
+                self.assign_near_slot(vehicle_location,vehicle_name,lane,current_velocity)
+                self.diff_tracker.pop(vehicle_name)
 
             self.in_slot_counter[vehicle_name]+=1
+        
+        elif vehicle_name in self.diff_tracker>2:
+            if len(self.diff_tracker[vehicle_name])>2:
+                diff_2,diff_1 = self.diff_tracker[vehicle_name][-3],self.diff_tracker[vehicle_name][-2]
+                rospy.loginfo("diff i-2: {}  diff i-1: {}  diff: {}".format(diff_2,diff_1,diff))
+                if diff_2<diff_1<diff:
+                    current_velocity = self.trajectories[vehicle_name]['v_(i-1)']
+                    self.trajectories.pop(vehicle_name)
+                    self.assign_near_slot(vehicle_location,vehicle_name,lane,current_velocity)
+                    self.diff_tracker.pop(vehicle_name)
+                    if vehicle_name in self.timers:
+                        self.timers.pop(vehicle_name)
+            
+                
+        # print("self timers at this point: {}".format(self.timers))
+        if self.trajectories[vehicle_name]['in_slot']:
+            if vehicle_name in self.timers:
+                if time.time()>self.timers[vehicle_name]:
+                    rospy.loginfo("time now: {} time ends: {}".format(time.time(),self.timers[vehicle_name]))
+                    diff =self.move_slot(vehicle_name,vehicle_location,lane,'Forward')
+                    self.timers.pop(vehicle_name)
+                    if vehicle_name in self.diff_tracker:
+                        self.diff_tracker.pop(vehicle_name)
+            else:
+                self.timers[vehicle_name] = time.time()+1.5
+
             
         self.trajectories[vehicle_name]['current_difference'] = diff
 
-        # rospy.loginfo("velocity is {} vehicle name {}".format(self.compute_velocity(vehicle_name),vehicle_name))
         return self.compute_velocity(vehicle_name),vehicle_name
         
             
 
-    def assign_near_slot(self, location,vehcile_name,lane):
+    def assign_near_slot(self, location,vehicle_name,lane,current_velocity=0):
         min_distance = float('inf')
         nearest_slot_id = None
         diff = None
-
 
         for slot_id, slot in self.slots.items():
             if slot['lane'] != lane:
@@ -158,14 +199,16 @@ class slotEnvironment:
                 min_distance = distance
                 nearest_slot_id = slot_id
                 diff = slot['location']['x'] - location['x']
-
+        
+       
 
         
         if min_distance<self.threshold :
             self.slots[nearest_slot_id]['filled'] = True
 
-        self.find_trajectory(nearest_slot_id,diff,vehcile_name,lane)
+        
 
+        self.find_trajectory(nearest_slot_id,diff,vehicle_name,lane,current_velocity)
         return diff, nearest_slot_id
     
 
@@ -180,11 +223,11 @@ class slotEnvironment:
 
 
     
-    def find_trajectory(self,  slot_id, diff,vehicle_name,lane,current_velocity =0):
+    def find_trajectory(self,  slot_id, diff,vehicle_name,lane,current_velocity):
         final_velocity = self.lane_velocities[lane]
         print("{} difference is {}".format(vehicle_name,diff))
 
-        if  0<abs(diff)<0.1:
+        if  0<abs(diff)<self.threshold:
             a1, a2 = 0,0 
             print("{} is at slot ".format(vehicle_name))
            
@@ -195,11 +238,13 @@ class slotEnvironment:
                 'v2':final_velocity,
                 'v_(i-1)': final_velocity,
                 'current_difference': diff,
+
                 'accelerate': False,
                 'in_slot': True
 
             }
-            print("{} trajectory is {}".format(vehicle_name,self.trajectories[vehicle_name]))
+            self.timers[vehicle_name]=time.time()+1.5
+ 
 
         elif diff > 0:
             a1, a2 = self.max_acceleration, self.max_deceleration
@@ -249,6 +294,8 @@ class slotEnvironment:
         t1 = (v1 - v0) / a1
         t2 = (v2 - v1) / a2
 
+        print("t1: {} v1")
+
         s1 = (v1**2-v0**2)/(2*a1)
         s2 = (v2**2-v1**2)/(2*a2)
 
@@ -283,11 +330,9 @@ class slotEnvironment:
         v_plus = (-b + math.sqrt(d)) / (2 * a)
         v_minus =  (-b - math.sqrt(d)) / (2 * a)
 
-        if diff < 0:
-            v1 = v_plus
-            
-        else:
-            v1 = v_minus
+
+        v1 = v_minus
+
 
 
         print("a: {} b: {} c: {}  v-: {}  v+:{}".format(a,b,c,v_minus,v_plus))
@@ -296,7 +341,6 @@ class slotEnvironment:
 
     def compute_velocity(self,vehicle_name):
         if self.trajectories[vehicle_name]['in_slot']:
-            rospy.loginfo("computing velocity in (in slot) statement")
             self.trajectories[vehicle_name]['v_(i-1)']=self.trajectories[vehicle_name]['v2']
 
         elif self.trajectories[vehicle_name]['accelerate']:
@@ -333,24 +377,33 @@ class slotEnvironment:
             return None
         
     def move_slot(self, vehicle_name,vehicle_location,lane,direction):
+        rospy.loginfo("{} moving slot ".format(vehicle_name))
+        current_velocity = self.trajectories[vehicle_name]['v_(i-1)']
         if direction =='Forward':
-            slot=self.find_slot_in_front(vehicle_location,lane)
-
+            slot,diff,new_slot_id=self.find_slot_in_front(vehicle_location['x'],lane)
+        rospy.loginfo("new slot id is {}".format(slot['id']))
+        self.find_trajectory(slot['id'],diff,vehicle_name,lane,current_velocity)
+        return diff
 
 
     def find_slot_in_front(self, bot_x_location, bot_lane):
         slot_in_front = None
+        new_slot_id = None
         min_distance = float('inf')
 
-        # Iterate over the slots to find the slot directly in front
+
+
         for slot_id, slot in self.slots.items():
+
             if slot['lane'] == bot_lane and slot['location']['x'] > bot_x_location:
                 distance = slot['location']['x'] - bot_x_location
                 if distance < min_distance:
                     min_distance = distance
                     slot_in_front = slot
+                    new_slot_id = slot_id
+   
 
-        return slot_in_front
+        return slot_in_front,min_distance,new_slot_id
 
 
 
